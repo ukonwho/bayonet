@@ -1,11 +1,11 @@
 import datetime
-from flask import escape
 from werkzeug.security import generate_password_hash
 
 from web import DB
 
+
 class User(DB.Model):
-    '''User表'''
+    """User表"""
 
     __tablename__ = 'src_user'
     username = DB.Column(DB.String(20), primary_key=True)
@@ -14,19 +14,21 @@ class User(DB.Model):
     phone = DB.Column(DB.String(20))
     email = DB.Column(DB.String(50))
     remark = DB.Column(DB.Text)
-    src_user_login_logs = DB.relationship('UserLoginLogs', back_populates='src_user', cascade='all, delete-orphan')  # 双向关系
+    src_user_login_logs = DB.relationship('UserLoginLogs', back_populates='src_user',
+                                          cascade='all, delete-orphan')  # 双向关系
     src_user_logs = DB.relationship('UserLogs', back_populates='src_user', cascade='all, delete-orphan')  # 双向关系
 
     def __init__(self, username, password, name, phone, email, remark):
-        self.username = escape(username)
+        self.username = username
         self.password = generate_password_hash(password)
-        self.name = escape(name)
-        self.phone = escape(phone)
-        self.email = escape(email)
-        self.remark = escape(remark)
+        self.name = name
+        self.phone = phone
+        self.email = email
+        self.remark = remark
+
 
 class UserLoginLogs(DB.Model):
-    '''User登录日志表'''
+    """User登录日志表"""
 
     __tablename__ = 'src_user_login_logs'
     id = DB.Column(DB.Integer, primary_key=True)
@@ -39,11 +41,12 @@ class UserLoginLogs(DB.Model):
     def __init__(self, username, login_ip, useragent):
         self.username = username
         self.login_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        self.login_ip = escape(login_ip)
-        self.useragent = escape(useragent)
+        self.login_ip = login_ip
+        self.useragent = useragent
+
 
 class UserLogs(DB.Model):
-    '''User操作日志表'''
+    """User操作日志表"""
 
     __tablename__ = 'src_user_logs'
     id = DB.Column(DB.Integer, primary_key=True)
@@ -59,8 +62,9 @@ class UserLogs(DB.Model):
         self.logs_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         self.logs_text = logs_text
 
+
 class SrcDomain(DB.Model):
-    '''主域名表'''
+    """主域名表"""
 
     __tablename__ = 'src_domain'
     domain = DB.Column(DB.String(100), primary_key=True)
@@ -68,7 +72,7 @@ class SrcDomain(DB.Model):
     domain_time = DB.Column(DB.String(30))
     flag = DB.Column(DB.String(50))
     src_subdomain = DB.relationship('SrcSubDomain', back_populates='src_domain',
-                                          cascade='all, delete-orphan')  # 双向关系
+                                    cascade='all, delete-orphan')  # 双向关系
 
     def __init__(self, domain, domain_name, flag='未扫描'):
         self.domain = domain
@@ -76,8 +80,9 @@ class SrcDomain(DB.Model):
         self.flag = flag
         self.domain_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+
 class SrcSubDomain(DB.Model):
-    '''子域名表'''
+    """子域名表"""
 
     __tablename__ = 'src_subdomain'
     subdomain = domain = DB.Column(DB.String(150), primary_key=True)
@@ -89,9 +94,10 @@ class SrcSubDomain(DB.Model):
     subdomain_time = DB.Column(DB.String(30))
     src_domain = DB.relationship('SrcDomain', back_populates='src_subdomain')  # 双向关系
     src_ports = DB.relationship('SrcPorts', back_populates='src_subdomain',
-                                    cascade='all, delete-orphan')  # 双向关系
-    src_urls = DB.relationship('SrcUrls', back_populates='src_subdomain',
                                 cascade='all, delete-orphan')  # 双向关系
+    src_urls = DB.relationship('SrcUrls', back_populates='src_subdomain',
+                               cascade='all, delete-orphan')  # 双向关系
+
     # src_vulnerabilitie = DB.relationship('SrcVulnerabilitie', back_populates='src_subdomain',
     #                            cascade='all, delete-orphan')  # 双向关系
 
@@ -104,8 +110,9 @@ class SrcSubDomain(DB.Model):
         self.flag = flag
         self.subdomain_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+
 class SrcPorts(DB.Model):
-    '''端口扫描表'''
+    """端口扫描表"""
 
     __tablename__ = 'src_ports'
     id = DB.Column(DB.Integer, primary_key=True)
@@ -131,8 +138,9 @@ class SrcPorts(DB.Model):
         self.brute = brute
         self.port_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+
 class SrcUrls(DB.Model):
-    '''URL表'''
+    """URL表"""
 
     __tablename__ = 'src_urls'
     url = DB.Column(DB.String(500), primary_key=True)
@@ -159,8 +167,9 @@ class SrcUrls(DB.Model):
         self.xray = xray
         self.url_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
+
 class SrcVulnerabilitie(DB.Model):
-    '''漏洞信息表'''
+    """漏洞信息表"""
 
     __tablename__ = 'src_vulnerabilitie'
     id = DB.Column(DB.Integer, primary_key=True)
@@ -172,7 +181,8 @@ class SrcVulnerabilitie(DB.Model):
     time = DB.Column(DB.String(30))
     scan_name = DB.Column(DB.String(30))
     flag = DB.Column(DB.Boolean)
-    #src_subdomain = DB.relationship('SrcSubDomain', back_populates='src_vulnerabilitie')  # 双向关系
+
+    # src_subdomain = DB.relationship('SrcSubDomain', back_populates='src_vulnerabilitie')  # 双向关系
 
     def __init__(self, subdomain, plugin, url, payload, raw, scan_name, flag=False):
         self.subdomain = subdomain

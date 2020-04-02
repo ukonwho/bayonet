@@ -3,13 +3,20 @@ import os
 import pathlib
 import urllib3
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+
 class BayonetConfig(object):
-    '''Flask数据配置'''
-    SECRET_KEY = str(uuid.uuid4())
-    SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:qazxsw@123@127.0.0.1/bayonet'  # 数据库连接字符串
+    """Flask数据配置"""
+    SECRET_KEY = os.getenv('SECRET_KEY') or str(uuid.uuid4())
+    # 数据库连接字符串
+    SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI') or 'mysql+pymysql://root:1q2w3e@127.0.0.1/bayonet'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # 打印执行的sql语句
+    SQLALCHEMY_ECHO = True
     TITLE = 'Bayonet 资产管理系统'
-    PORT = 80  # web端口
+    PORT = os.getenv('PORT') or 80  # web端口
+
 
 class PortScan:
     cdn_scan = True  # 不扫描识别为cdn的IP
@@ -20,6 +27,7 @@ class PortScan:
     # nmap程序路径地址，可指定具体路径或设置环境变量
     nmap_search_path = ('nmap', '/usr/bin/nmap', '/usr/local/bin/nmap', '/sw/bin/nmap', '/opt/local/bin/nmap')
     port_num = 500  # 超过多少个端口识别为CDN丢弃
+
 
 class Oneforall:
     # 模块API配置
@@ -215,6 +223,7 @@ class Oneforall:
                          'help', 'live', 'mall', 'blogs', 'files', 'forum',
                          'store', 'mobile'}
 
+
 class UrlScan:
     timeout = 15  # HTTP访问超时
     success_status_code = [200]  # 该状态码表示为有web应用程序
@@ -228,10 +237,11 @@ class UrlScan:
                          'sys', 'test', 'api', 'about', 'html', 'site', 'list', 'service', 'help', 'sso', 'mobile',
                          'info', 'Home', 'blog', 'file', 'auth', 'pages']
 
+
 class crawlergo:
     # chromium浏览器可执行文件绝对路径
     chromium_path = '/usr/lib/chromium-browser/chromium-browser'
     max_tab_count = '5'  # 爬虫同时开启最大标签页
-    filter_mode = 'smart'   # 过滤模式 simple-简单、smart-智能、strict-严格
+    filter_mode = 'smart'  # 过滤模式 simple-简单、smart-智能、strict-严格
     max_crawled_count = '200'  # 爬虫最大任务数量
     cache_path = '/Users/[username]/Library/Caches/Google/Chrome/Default/Cache/'  # 浏览器缓存地址，会自动删除提高效率
