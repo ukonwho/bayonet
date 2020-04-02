@@ -15,7 +15,8 @@ from web.route.home import html
 from web.route.src import html
 
 from web.route.user.api import UserLogin, UserSetting, UserPassword, UserAdd, UserManager, UserLog, UserLoginLog
-from web.route.src.api import SrcDomainAPI, SrcPortsAPI, SrcSubDomainAPI, SrcUrlsAPI, SrcUrls1API, SrcScanAPI, SrcScanSuccessAPI
+from web.route.src.api import SrcDomainAPI, SrcPortsAPI, SrcSubDomainAPI, SrcUrlsAPI, SrcUrls1API, SrcScanAPI, \
+    SrcScanSuccessAPI
 
 API.add_resource(UserLogin, '/api/user/login', endpoint='api_user_login')
 API.add_resource(UserSetting, '/api/user/setting', endpoint='api_user_setting')
