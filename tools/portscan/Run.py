@@ -15,7 +15,7 @@ if not PortScan.shodan_api:
     logger.log('ALERT', f'未填写shodan api秘钥')
     check = False
 else:
-    API = shodan.Shodan(PortScan.shodan_api)
+    API = shodan.Shodan(PortScan.shodan_api_key)
     try:
         time.sleep(1)
         API.info()
