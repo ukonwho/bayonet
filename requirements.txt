@@ -33,3 +33,5 @@ secrets==1.0.2
 lxml
 PyMySQL==0.9.3
 python-dotenv==0.9.1
+gunicorn
+gevent
