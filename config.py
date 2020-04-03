@@ -18,7 +18,7 @@ class BayonetConfig(object):
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI') or 'mysql+pymysql://root:1q2w3e@127.0.0.1/bayonet'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # 打印执行的sql语句
-    SQLALCHEMY_ECHO = True
+    SQLALCHEMY_ECHO = False
     TITLE = 'Bayonet 资产管理系统'
     # web端口
     PORT = int(os.getenv('PORT', '80'))
