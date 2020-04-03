@@ -19,6 +19,7 @@ class BayonetConfig(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     # 打印执行的sql语句
     SQLALCHEMY_ECHO = False
+    SQLALCHEMY_POOL_RECYCLE = 3000
     TITLE = 'Bayonet 资产管理系统'
     # web端口
     PORT = int(os.getenv('PORT', '80'))
