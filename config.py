@@ -69,7 +69,7 @@ class Oneforall:
     riskiq_api_key = ''
     # Shodan可以免费注册获取API: https://account.shodan.io/register
     # 免费的API限速1秒查询1次
-    shodan_api_key = ''
+    shodan_api_key = os.getenv('SHODAN_API_KEY') or 'xxxxxxxx'
     # ThreatBook API 查询子域名需要收费 https://x.threatbook.cn/nodev4/vb4/myAPI
     threatbook_api_key = ''
     # VirusTotal可以免费注册获取API: https://developers.virustotal.com/reference
