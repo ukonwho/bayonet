@@ -11,7 +11,7 @@ from tools.portscan.socket_scan import socket_main
 from tools.portscan.scan_nmap import Nmap_Portscan
 
 check = True
-if not PortScan.shodan_api:
+if not PortScan.shodan_api_key:
     logger.log('ALERT', f'未填写shodan api秘钥')
     check = False
 else:
