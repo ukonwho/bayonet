@@ -251,7 +251,7 @@ class UrlScan:
 
 class crawlergo:
     # chromium浏览器可执行文件绝对路径
-    chromium_path = '/usr/lib/chromium-browser/chromium-browser'
+    chromium_path = os.getenv('CHROMIUM_PATH') or '/usr/bin/chromium-browser '
     max_tab_count = '5'  # 爬虫同时开启最大标签页
     filter_mode = 'smart'  # 过滤模式 simple-简单、smart-智能、strict-严格
     max_crawled_count = '200'  # 爬虫最大任务数量
