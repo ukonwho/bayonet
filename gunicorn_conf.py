@@ -2,7 +2,7 @@ proc_name = 'gunicorn.pid'
 bind = "0.0.0.0:80"
 backlog = 2048
 timeout = 30
-worker_class = 'gevent'
+#worker_class = 'gevent'
 worker_connections = 1000
 
 # 启动的进程数
