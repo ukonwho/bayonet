@@ -6,20 +6,20 @@ from web.utils.auxiliary import login_required, src_count
 @APP.route('/html/home/index')
 @login_required
 def html_home_index():
-    '''框架首页'''
+    """框架首页"""
     return render_template('/home/index.html', username=session['username'], title=TITLE)
 
 @APP.route('/html/home/home')
 @login_required
 def html_home():
-    '''主页'''
+    """主页"""
     dict1 = src_count()
     return render_template('home/welcome.html', title=TITLE, count=dict1)
 
 @APP.route('/home/init')
 @login_required
 def api_menu_init():
-    '''菜单栏目'''
+    """菜单栏目"""
     caching_menu = {'clearUrl': url_for('api_caching_clear')}  # 缓存菜单
     home_menu = {'title': '主页', 'icon': 'fa fa-home', 'href': url_for('html_home')}  # 主页菜单
     logo_menu = {'title': 'Bayonet', 'image': url_for('static', filename='images/logo.png'), 'href': ''}  # logo菜单

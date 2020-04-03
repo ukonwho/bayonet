@@ -7,7 +7,7 @@ from web.models import SrcDomain, SrcSubDomain, SrcPorts, SrcUrls, SrcVulnerabil
 from web.utils.logs import logger
 
 class SrcDomainAPI(Resource):
-    '''src 主域名任务管理类'''
+    """src 主域名任务管理类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -18,7 +18,7 @@ class SrcDomainAPI(Resource):
         self.parser.add_argument("searchParams", type=str)
 
     def post(self):
-        '''添加任务'''
+        """添加任务"""
         if not session.get('status'):
             return {'result': {'status_code': 401}}
         args = self.parser.parse_args()
@@ -151,7 +151,7 @@ class SrcDomainAPI(Resource):
         return {'result': {'status_code': 200}}
 
 class SrcPortsAPI(Resource):
-    '''src 端口管理类'''
+    """src 端口管理类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -214,7 +214,7 @@ class SrcPortsAPI(Resource):
             return jsondata
 
 class SrcSubDomainAPI(Resource):
-    '''src 子域名管理类'''
+    """src 子域名管理类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -279,7 +279,7 @@ class SrcSubDomainAPI(Resource):
             return jsondata
 
 class SrcUrlsAPI(Resource):
-    '''src url扫描任务管理类'''
+    """src url扫描任务管理类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -411,7 +411,7 @@ class SrcUrlsAPI(Resource):
         return {'result': {'status_code': 200}}
 
 class SrcUrls1API(Resource):
-    '''src url管理类'''
+    """src url管理类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -475,7 +475,7 @@ class SrcUrls1API(Resource):
             return jsondata
 
 class SrcScanAPI(Resource):
-    '''src 漏洞管理类'''
+    """src 漏洞管理类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -601,7 +601,7 @@ class SrcScanAPI(Resource):
         return {'result': {'status_code': 200}}
 
 class SrcScanSuccessAPI(Resource):
-    '''src 已提交漏洞管理类'''
+    """src 已提交漏洞管理类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()

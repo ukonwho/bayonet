@@ -77,7 +77,7 @@ def Warehouse(table, domain, db=None):
     logger.log('INFOR', f'子域名入库完成')
 
 def SelectIP(ip):
-    '''查询IP归属地'''
+    """查询IP归属地"""
     try:
         result = IPDB.find_map(ip, 'CN')
     except Exception as e:
@@ -91,7 +91,7 @@ def SelectIP(ip):
         return ipinfo
 
 def WriteDb(subdomain, domain, subdomain_ip, city, cdn):
-    '''写入数据库'''
+    """写入数据库"""
     result = SrcSubDomain.query.filter(SrcSubDomain.subdomain == subdomain).count()
     if result:
         logger.log('DEBUG', f'数据库已有该子域名[{subdomain}]')

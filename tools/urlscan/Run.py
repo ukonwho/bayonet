@@ -28,14 +28,16 @@ user_agents = [
     'Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/68.0']
 LOCK = threading.RLock()
 
+
 def ReadPort():
-    '''读取ports表任务'''
+    """读取ports表任务"""
     sql_ports_list = SrcPorts.query.filter(SrcPorts.flag == False).limit(UrlScan.threads).all()
     DB.session.commit()
     return sql_ports_list
 
+
 def WritePort(sql_ports):
-    '''修改ports表任务'''
+    """修改ports表任务"""
     LOCK.acquire()
     sql = SrcPorts.query.filter(SrcPorts.id == sql_ports.id).first()
     DB.session.commit()
@@ -53,6 +55,7 @@ def WritePort(sql_ports):
     finally:
         LOCK.release()
 
+
 def WirteUrl(url, subdomain, title, fingerprint, waf):
     LOCK.acquire()
     if len(url) > 300:
@@ -67,6 +70,7 @@ def WirteUrl(url, subdomain, title, fingerprint, waf):
         logger.log('ALERT', f'入库urls任务SQL错误:{e}')
     finally:
         LOCK.release()
+
 
 def action(sql_ports):
     logger.log('INFOR', f'url开始探测:{sql_ports.subdomain}:{sql_ports.port}')
@@ -114,8 +118,9 @@ def action(sql_ports):
         logger.log('DEBUG', f'url探测:{response.url}为其他状态码[{response.status_code}]')
         WritePort(sql_ports)
 
+
 def check_http(sql_ports):
-    '''HTTP服务探测'''
+    """HTTP服务探测"""
     url = f'http://{sql_ports.subdomain}:{sql_ports.port}'
     headers = gen_fake_header()
     try:
@@ -133,8 +138,9 @@ def check_http(sql_ports):
     else:
         return response
 
+
 def get_title(markup):
-    '''获取网页标题'''
+    """获取网页标题"""
     try:
         soup = BeautifulSoup(markup, 'lxml')
     except:
@@ -164,11 +170,13 @@ def get_title(markup):
         return text.strip()
     return None
 
+
 def get_banner(headers):
     banner = str({'Server': headers.get('Server'),
                   'Via': headers.get('Via'),
                   'X-Powered-By': headers.get('X-Powered-By')})
     return banner
+
 
 def gen_random_ip():
     """
@@ -178,6 +186,7 @@ def gen_random_ip():
         ip = ipaddress.IPv4Address(random.randint(0, 2 ** 32 - 1))
         if ip.is_global:
             return ip.exploded
+
 
 def gen_fake_header():
     """
@@ -201,6 +210,7 @@ def gen_fake_header():
     }
     return headers
 
+
 def urlscan_main():
     process_name = multiprocessing.current_process().name
     logger.log('INFOR', f'可用URL探测进程启动:{process_name}')
@@ -209,11 +219,12 @@ def urlscan_main():
         sql_ports_list = ReadPort()
         if not sql_ports_list:
             time.sleep(30)
-            #logger.log('INFOR', f'无可用端口')
+            # logger.log('INFOR', f'无可用端口')
         else:
             wait_for = [pool.submit(action, sql_port) for sql_port in sql_ports_list]
             for f in futures.as_completed(wait_for):
                 f.result()
+
 
 def sub_path_main(url):
     sub_pool = futures.ThreadPoolExecutor(max_workers=UrlScan.subdirectory_threads)
@@ -227,6 +238,7 @@ def sub_path_main(url):
     sub_pool.shutdown()
     return sucess
 
+
 def sub_chek(url):
     headers = gen_fake_header()
     try:
@@ -235,6 +247,7 @@ def sub_chek(url):
         return None
     else:
         return response
+
 
 if __name__ == '__main__':
     urlscan_main()

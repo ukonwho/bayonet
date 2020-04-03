@@ -9,7 +9,7 @@ from web import DB, APP
 from web.utils.auxiliary import addlog
 
 class UserLogin(Resource):
-    '''user login类'''
+    """user login类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -19,7 +19,7 @@ class UserLogin(Resource):
         self.parser.add_argument("rememberMe", type=bool, location='json')
 
     def post(self):
-        '''登录接口'''
+        """登录接口"""
         args = self.parser.parse_args()
         key_username = args.username
         key_password = args.password
@@ -64,7 +64,7 @@ class UserLogin(Resource):
             return {'result': {'status_code': 201}}
 
 class UserSetting(Resource):
-    '''user 修改用户资料类'''
+    """user 修改用户资料类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -102,7 +102,7 @@ class UserSetting(Resource):
         return {'result': {'status_code': 200}}
 
 class UserPassword(Resource):
-    '''user 修改用户密码类'''
+    """user 修改用户密码类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -140,7 +140,7 @@ class UserPassword(Resource):
         return {'result': {'status_code': 200}}
 
 class UserAdd(Resource):
-    '''user 新增用户类'''
+    """user 新增用户类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -180,7 +180,7 @@ class UserAdd(Resource):
         return {'result': {'status_code': 200}}
 
 class UserManager(Resource):
-    '''user 用户管理类'''
+    """user 用户管理类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -267,7 +267,7 @@ class UserManager(Resource):
         return {'result': {'status_code': 200}}
 
 class UserLog(Resource):
-    '''user 用户操作日志类'''
+    """user 用户操作日志类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()
@@ -328,7 +328,7 @@ class UserLog(Resource):
             return jsondata
 
 class UserLoginLog(Resource):
-    '''user 用户登录日志类'''
+    """user 用户登录日志类"""
 
     def __init__(self):
         self.parser = reqparse.RequestParser()

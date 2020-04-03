@@ -1,8 +1,8 @@
 from tools.oneforall.common.query import Query
 
-'''
+"""
 最多查询100条
-'''
+"""
 
 
 class VirusTotal(Query):

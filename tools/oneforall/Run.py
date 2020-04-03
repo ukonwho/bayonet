@@ -7,7 +7,7 @@ from web.utils.logs import logger
 from tools.oneforall.oneforall import OneForAll
 
 def ReadDomain():
-    '''读取主域名任务'''
+    """读取主域名任务"""
     results = SrcDomain.query.filter(SrcDomain.flag != '子域名扫描完成').first()
     DB.session.commit()
     if results:
@@ -20,7 +20,7 @@ def ReadDomain():
     return results
 
 def WriteDomain(results):
-    '''修改主域名任务状态'''
+    """修改主域名任务状态"""
     results.flag = '子域名扫描完成'
     try:
         DB.session.commit()
@@ -29,11 +29,11 @@ def WriteDomain(results):
         logger.log('ALERT', '修改主域名任务状态SQL错误:%s' % e)
 
 def action(domain):
-    '''子程序执行'''
+    """子程序执行"""
     OneForAll(domain).run()
 
 def main():
-    '''主方法'''
+    """主方法"""
     process_name = multiprocessing.current_process().name
     logger.log('INFOR', f'子域名扫描进程启动:{process_name}')
     while True:

@@ -27,7 +27,7 @@ else:
         check = False
 
 def ReadSubDomain():
-    '''读取子域名任务'''
+    """读取子域名任务"""
     if PortScan.cdn_scan:
         sql_subdomain = SrcSubDomain.query.filter(SrcSubDomain.flag == False, SrcSubDomain.cdn == False).first()
     else:
@@ -36,7 +36,7 @@ def ReadSubDomain():
     return sql_subdomain
 
 def WriteSubDomain(results):
-    '''修改子域名任务状态'''
+    """修改子域名任务状态"""
     sql_subdomain = SrcSubDomain.query.filter(SrcSubDomain.subdomain_ip == results.subdomain_ip).all()
     DB.session.commit()
     if sql_subdomain:
@@ -50,7 +50,7 @@ def WriteSubDomain(results):
             logger.log('ALERT', f'更新子域名任务状态SQL错误:{e}')
 
 def WritePorts(ip, subdomain, info_dict):
-    '''端口扫描入库'''
+    """端口扫描入库"""
     if not SrcPorts.query.filter(SrcPorts.subdomain_ip == ip).count():
         for info in info_dict:
             sql = SrcPorts(subdomain_ip=ip, subdomain=subdomain, port=info_dict[info]['port'], service=info_dict[info]['name'], product=info_dict[info]['product'],

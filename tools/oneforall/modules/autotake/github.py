@@ -48,11 +48,11 @@ def github_takeover(url):
                 print('[*]创建接管库' + repo_name + '成功，正在进行自动接管...')
                 # 接管文件生成
                 # index.html文件
-                html = b'''
+                html = b"""
                 <html>
                     <p>Subdomain Takerover Test!</>
                 </html>
-                '''
+                """
                 html64 = base64.b64encode(html).decode('utf-8')
                 html_dict = {
                     "message": "my commit message",

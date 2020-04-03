@@ -18,13 +18,13 @@ from tools.oneforall.dbexport import SelectIP, WriteDb
 crawlergo_path = str(pathlib.Path(__file__).parent.joinpath('crawlergo').resolve())
 
 def ReadUrl():
-    '''读取url任务, 一次读取一条记录'''
+    """读取url任务, 一次读取一条记录"""
     sql_url = SrcUrls.query.filter(SrcUrls.flag == True).first()
     DB.session.commit()
     return sql_url
 
 def WriteUrl(sql_url):
-    '''修改爬虫任务状态'''
+    """修改爬虫任务状态"""
     sql_url.flag = False
     sql_url.reptile = True
     try:
@@ -34,7 +34,7 @@ def WriteUrl(sql_url):
         logger.log('ALERT', '修改URL任务状态SQL错误:%s' % e)
 
 def action(target):
-    '''子程序执行'''
+    """子程序执行"""
     cmd = [crawlergo_path, "-c", crawlergo.chromium_path, "-o", "json", '-t', crawlergo.max_tab_count, '-f', crawlergo.filter_mode,
           '-m', crawlergo.max_crawled_count, target]
     rsp = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -50,7 +50,7 @@ def action(target):
         return req_list, req_subdomain
 
 def WriteSubdomain(req_subdomain):
-    '''子域名入库'''
+    """子域名入库"""
     for subdomain in req_subdomain:
         ip = domain_ip(subdomain)
         if not ip:
@@ -61,7 +61,7 @@ def WriteSubdomain(req_subdomain):
         WriteDb(subdomain, domain, ip, city, cdn)
 
 def FindDomain(subdomain):
-    '''提取主域名'''
+    """提取主域名"""
     try:
         result = tldextract.extract(subdomain)
     except:
@@ -70,7 +70,7 @@ def FindDomain(subdomain):
         return result.domain + '.' + result.suffix
 
 def domain_ip(subdomain):
-    '''域名转IP'''
+    """域名转IP"""
     try:
         ip =socket.gethostbyname(subdomain)
     except:
@@ -79,7 +79,7 @@ def domain_ip(subdomain):
         return ip
 
 def write_request(dict1):
-    '''保存爬虫结果'''
+    """保存爬虫结果"""
     try:
         resule = json.dumps(dict1)
     except Exception as e:

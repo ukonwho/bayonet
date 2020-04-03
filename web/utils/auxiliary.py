@@ -9,7 +9,7 @@ from web.utils.logs import logger
 from web.models import UserLogs, SrcVulnerabilitie, SrcSubDomain, SrcUrls, SrcPorts
 
 def login_required(func):
-    '''登录验证装饰器'''
+    """登录验证装饰器"""
     @wraps(func)
     def inner(*args, **kwargs):
         user = session.get('status')
@@ -19,7 +19,7 @@ def login_required(func):
     return inner
 
 def addlog(username, logs_ip, logs_text):
-    '''添加用户操作日志'''
+    """添加用户操作日志"""
     try:
         logs = UserLogs(username, logs_ip, logs_text)
         DB.session.add(logs)
@@ -29,7 +29,7 @@ def addlog(username, logs_ip, logs_text):
         DB.session.rollback()
 
 def src_count():
-    '''统计数据库数量'''
+    """统计数据库数量"""
     Vulnerabilitie_count = SrcUrls.query.filter(SrcUrls.flag == True).count()
     subdomain_count = SrcSubDomain.query.count()
     SrcUrls_count = SrcUrls.query.count()
@@ -42,7 +42,7 @@ def src_count():
     return dict1
 
 def Rsubdomain(url):
-    '''提取子域名'''
+    """提取子域名"""
     result = urlparse(url)
     return result.hostname
 

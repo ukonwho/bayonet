@@ -6,15 +6,15 @@ from PIL import Image, ImageFont, ImageDraw, ImageFilter
 from pathlib import Path
 
 def rndColor():
-    '''随机颜色'''
+    """随机颜色"""
     return (random.randint(32, 127), random.randint(32, 127), random.randint(32, 127))
 
 def gene_text():
-    '''生成4位验证码'''
+    """生成4位验证码"""
     return ''.join(random.sample(string.ascii_letters+string.digits, 4))
 
 def draw_lines(draw, num, width, height):
-    '''加入划线，防止简单识别'''
+    """加入划线，防止简单识别"""
     for num in range(num):
         x1 = random.randint(0, width / 2)
         y1 = random.randint(0, height / 2)
@@ -23,7 +23,7 @@ def draw_lines(draw, num, width, height):
         draw.line(((x1, y1), (x2, y2)), fill='black', width=1)
 
 def get_verify_code():
-    '''生成验证码图形'''
+    """生成验证码图形"""
     code = gene_text()
     # 图片大小120×50
     width, height = 120, 50

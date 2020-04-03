@@ -8,7 +8,7 @@ from web.models import User
 
 @APP.route('/api/user/captcha')
 def api_get_code():
-    '''图片验证码接口'''
+    """图片验证码接口"""
     image, code = get_verify_code()
     buf = BytesIO()
     image.save(buf, 'jpeg')
@@ -20,7 +20,7 @@ def api_get_code():
 
 @APP.route('/')
 def html_user_login():
-    '''user login页面'''
+    """user login页面"""
     if 'status' in session:
         return redirect(url_for('html_home_index'), 302)
     return render_template('user/login.html', title=TITLE)
@@ -28,7 +28,7 @@ def html_user_login():
 @APP.route('/api/user/logout')
 @login_required
 def api_user_logout():
-    '''用户注销'''
+    """用户注销"""
     addlog(session.get('username'), session.get('login_ip'), '注销登录成功')
     logger.log('INFOR', f"用户[{session.get('username')}]注销成功")
     session.pop('status')
@@ -39,7 +39,7 @@ def api_user_logout():
 @APP.route('/html/user/setting')
 @login_required
 def html_user_setting():
-    '''用户资料修改'''
+    """用户资料修改"""
     user_query = User.query.filter(User.username == session.get('username')).first()  # 查询该用户信息
     if not user_query:
         return redirect(url_for('html_user_login'), 302)
@@ -55,29 +55,29 @@ def html_user_setting():
 @APP.route('/html/user/password')
 @login_required
 def html_user_password():
-    '''修改用户密码'''
+    """修改用户密码"""
     return render_template('user/userpassword.html', title=TITLE)
 
 @APP.route('/html/user/useradd')
 @login_required
 def html_user_add():
-    '''新增用户'''
+    """新增用户"""
     return render_template('user/user-add.html', title=TITLE)
 
 @APP.route('/html/user/usermanager')
 @login_required
 def html_user_manager():
-    '''用户管理'''
+    """用户管理"""
     return render_template('user/user-manager.html', title=TITLE)
 
 @APP.route('/html/user/logs')
 @login_required
 def html_user_logs():
-    '''用户日志操作查询页面'''
+    """用户日志操作查询页面"""
     return render_template('user/userlogs.html')
 
 @APP.route('/html/user/loginlog')
 @login_required
 def html_user_loginlog():
-    '''用户日志登录查询页面'''
+    """用户日志登录查询页面"""
     return render_template('user/loginlogs.html')
