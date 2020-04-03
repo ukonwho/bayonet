@@ -29,7 +29,7 @@ beautifulsoup4==4.8.2
 dnspython==1.16.0
 Pillow==7.0.0
 secrets==1.0.2
-psycopg2
+#psycopg2
 lxml
 PyMySQL==0.9.3
 python-dotenv==0.9.1
