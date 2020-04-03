@@ -46,7 +46,7 @@ def WritePort(sql_ports):
         LOCK.release()
         return
     sql.flag = True
-    DB.session.add(sql)
+    # DB.session.add(sql)
     try:
         DB.session.commit()
     except Exception as e:
