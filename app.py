@@ -26,12 +26,13 @@ def DeletDb():
 
 
 def bayonet_main():
-    CreateDatabase()
-    CreateUser()
-    APP.run(host='0.0.0.0', port=APP.config['PORT'])
+    #CreateDatabase()
+    #CreateUser()
+    #APP.run(host='0.0.0.0', port=APP.config['PORT'])
+    pass
 
 
 if __name__ == '__main__':
     bayonet_main()
 
-APP.run()
+APP.run(host='0.0.0.0', port=APP.config['PORT'])
