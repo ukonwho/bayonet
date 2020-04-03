@@ -40,7 +40,7 @@ def WritePort(sql_ports):
     """修改ports表任务"""
     LOCK.acquire()
     sql = SrcPorts.query.filter(SrcPorts.id == sql_ports.id).first()
-    DB.session.commit()
+    # DB.session.commit()
     if not sql:
         logger.log('ALERT', f'更新端口信息{sql_ports.id}不存在')
         LOCK.release()
