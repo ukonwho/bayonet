@@ -1,5 +1,5 @@
 from flask_restful import reqparse, Resource
-from flask import session, escape, json
+from flask import session, json
 
 from web import DB
 from web.utils.auxiliary import addlog
@@ -22,8 +22,8 @@ class SrcDomainAPI(Resource):
         if not session.get('status'):
             return {'result': {'status_code': 401}}
         args = self.parser.parse_args()
-        key_domain = escape(args.domain.replace('/', ''))
-        key_domain_name = escape(args.domain_name)
+        key_domain = args.domain.replace('/', '')
+        key_domain_name = args.domain_name
         if not key_domain or not key_domain_name:
             return {'result': {'status_code': 500}}
         src_query = SrcDomain.query.filter(SrcDomain.domain == key_domain).first()
@@ -115,7 +115,7 @@ class SrcDomainAPI(Resource):
         if not session.get('status'):
             return {'result': {'status_code': 401}}
         args = self.parser.parse_args()
-        key_domain = escape(args.domain)
+        key_domain = args.domain
         domain_query = SrcDomain.query.filter(SrcDomain.domain == key_domain).first()
         if not domain_query:  # 删除的domain不存在
             return {'result': {'status_code': 202}}
@@ -134,7 +134,7 @@ class SrcDomainAPI(Resource):
         if not session.get('status'):
             return {'result': {'status_code': 401}}
         args = self.parser.parse_args()
-        key_domain = escape(args.domain)
+        key_domain = args.domain
         domain_query = SrcDomain.query.filter(SrcDomain.domain == key_domain).first()
         if not domain_query:  # 删除的domain不存在
             return {'result': {'status_code': 202}}
@@ -328,7 +328,7 @@ class SrcUrlsAPI(Resource):
                 data1['id'] = index
                 data1['subdomain'] = i.subdomain
                 data1['url'] = i.url
-                data1['title'] = escape(i.title)
+                data1['title'] = i.title
                 data1['fingerprint'] = i.fingerprint
                 data1['waf'] = i.waf
                 data1['reptile'] = i.reptile
@@ -458,7 +458,7 @@ class SrcUrls1API(Resource):
                 data1['id'] = index
                 data1['subdomain'] = i.subdomain
                 data1['url'] = i.url
-                data1['title'] = escape(i.title)
+                data1['title'] = i.title
                 data1['fingerprint'] = i.fingerprint
                 data1['waf'] = i.waf
                 data1['reptile'] = i.reptile
@@ -524,8 +524,8 @@ class SrcScanAPI(Resource):
                 data1['id'] = i.id
                 data1['subdomain'] = i.subdomain
                 data1['plugin'] = i.plugin
-                data1['url'] = escape(i.url)
-                data1['payload'] = escape(i.payload)
+                data1['url'] = i.url
+                data1['payload'] = i.payload
                 data1['raw'] = i.raw.replace('\n', '<br/>')
                 data1['scan_name'] = i.scan_name
                 data1['time'] = i.time
@@ -649,8 +649,8 @@ class SrcScanSuccessAPI(Resource):
                 data1['id'] = i.id
                 data1['subdomain'] = i.subdomain
                 data1['plugin'] = i.plugin
-                data1['url'] = escape(i.url)
-                data1['payload'] = escape(i.payload)
+                data1['url'] = i.url
+                data1['payload'] = i.payload
                 data1['raw'] = i.raw.replace('\n', '<br/>')
                 data1['scan_name'] = i.scan_name
                 data1['time'] = i.time
