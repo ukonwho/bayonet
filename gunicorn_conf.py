@@ -6,7 +6,7 @@ worker_class = 'gevent'
 worker_connections = 1000
 
 # 启动的进程数
-workers = 4
+workers = 2
 threads = 1
 daemon = False
 
