@@ -9,7 +9,7 @@ import threading
 import multiprocessing
 
 from web.models import SrcPorts, SrcUrls
-from web import DB
+from tools.urlscan import DB
 from web.utils.logs import logger
 from tools.urlscan.wafw00f.main import main
 from config import UrlScan
@@ -32,23 +32,16 @@ LOCK = threading.RLock()
 def ReadPort():
     """读取ports表任务"""
     sql_ports_list = SrcPorts.query.filter(SrcPorts.flag == False).limit(UrlScan.threads).all()
-    DB.session.commit()
+    # DB.session.commit()
     return sql_ports_list
 
 
 def WritePort(sql_ports):
     """修改ports表任务"""
-    LOCK.acquire()
-    sql = SrcPorts.query.filter(SrcPorts.id == sql_ports.id).first()
-    # DB.session.commit()
-    if not sql:
-        logger.log('ALERT', f'更新端口信息{sql_ports.id}不存在')
-        LOCK.release()
-        return
-    sql.flag = True
-    # DB.session.add(sql)
     try:
-        DB.session.commit()
+        LOCK.acquire()
+        SrcPorts.query.filter(SrcPorts.id == sql_ports.id).update(dict(flag=True))
+        # DB.session.commit()
     except Exception as e:
         DB.session.rollback()
         logger.log('ALERT', f'更新端口ports任务状态SQL错误:{e}')
@@ -61,10 +54,10 @@ def WirteUrl(url, subdomain, title, fingerprint, waf):
     if len(url) > 300:
         LOCK.release()
         return None
-    sql_urls = SrcUrls(url=url, subdomain=subdomain, title=title, fingerprint=fingerprint, waf=waf)
-    DB.session.add(sql_urls)
     try:
-        DB.session.commit()
+        sql_urls = SrcUrls(url=url, subdomain=subdomain, title=title, fingerprint=fingerprint, waf=waf)
+        DB.session.add(sql_urls)
+        # DB.session.commit()
     except Exception as e:
         DB.session.rollback()
         logger.log('ALERT', f'入库urls任务SQL错误:{e}')
