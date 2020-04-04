@@ -1,7 +1,7 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
-from celery import Celery
+from flask_celery import Celery
 from config import BayonetConfig
 
 APP = Flask(__name__)
@@ -9,7 +9,8 @@ APP.config.from_object(BayonetConfig)
 DB = SQLAlchemy(APP)
 API = Api(APP)
 TITLE = APP.config['TITLE']
-celery = Celery(APP)
+celery = Celery()
+celery.init_app(APP)
 
 from web.route.user import html
 from web.route.home import html
