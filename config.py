@@ -23,6 +23,16 @@ class BayonetConfig(object):
     TITLE = 'Bayonet 资产管理系统'
     # web端口
     PORT = int(os.getenv('PORT', '80'))
+    CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL') or 'redis://127.0.0.1:6379/0'
+    CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND') or 'redis://127.0.0.1:6379/1'
+    CELERY_TIMEZONE = 'Asia/Shanghai'
+    CELERYBEAT_SCHEDULE = {
+        'urlscan': {
+            'task': 'tools.urlscan.Run.urlscan_main',
+            'schedule': 30.0
+        }
+    }
+    # CELERY_INCLUDE = []
 
 
 class PortScan:

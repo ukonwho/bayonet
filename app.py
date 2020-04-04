@@ -1,6 +1,5 @@
 from web.models import User
-from web import APP, DB
-
+from web import APP, DB, celery
 
 #def CreateDatabase():
 #    """创建数据库"""

@@ -35,3 +35,4 @@ PyMySQL==0.9.3
 python-dotenv==0.9.1
 gunicorn
 gevent
+celery==4.4.2

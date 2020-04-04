@@ -1,18 +1,15 @@
-import requests
-import chardet
-from bs4 import BeautifulSoup
-import random
 import ipaddress
-from concurrent import futures
-import time
-import threading
-import multiprocessing
+import random
 
-from web.models import SrcPorts, SrcUrls
-from tools.urlscan import DB
-from web.utils.logs import logger
-from tools.urlscan.wafw00f.main import main
+import chardet
+import requests
+from bs4 import BeautifulSoup
+
 from config import UrlScan
+from web import DB, celery
+from tools.urlscan.wafw00f.main import main
+from web.models import SrcPorts, SrcUrls
+from web.utils.logs import logger
 
 requests.packages.urllib3.disable_warnings()
 user_agents = [
@@ -26,43 +23,34 @@ user_agents = [
     'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.13; rv:61.0) '
     'Gecko/20100101 Firefox/68.0',
     'Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/68.0']
-LOCK = threading.RLock()
 
 
 def ReadPort():
     """读取ports表任务"""
     sql_ports_list = SrcPorts.query.filter(SrcPorts.flag == False).limit(UrlScan.threads).all()
-    # DB.session.commit()
     return sql_ports_list
 
 
 def WritePort(sql_ports):
     """修改ports表任务"""
     try:
-        LOCK.acquire()
         SrcPorts.query.filter(SrcPorts.id == sql_ports.id).update(dict(flag=True))
-        # DB.session.commit()
+        DB.session.commit()
     except Exception as e:
         DB.session.rollback()
         logger.log('ALERT', f'更新端口ports任务状态SQL错误:{e}')
-    finally:
-        LOCK.release()
 
 
 def WirteUrl(url, subdomain, title, fingerprint, waf):
-    LOCK.acquire()
     if len(url) > 300:
-        LOCK.release()
         return None
     try:
         sql_urls = SrcUrls(url=url, subdomain=subdomain, title=title, fingerprint=fingerprint, waf=waf)
         DB.session.add(sql_urls)
-        # DB.session.commit()
+        DB.session.commit()
     except Exception as e:
         DB.session.rollback()
         logger.log('ALERT', f'入库urls任务SQL错误:{e}')
-    finally:
-        LOCK.release()
 
 
 def action(sql_ports):
@@ -204,31 +192,24 @@ def gen_fake_header():
     return headers
 
 
+@celery.task
 def urlscan_main():
-    process_name = multiprocessing.current_process().name
-    logger.log('INFOR', f'可用URL探测进程启动:{process_name}')
-    pool = futures.ThreadPoolExecutor(max_workers=UrlScan.threads)
-    while True:
-        sql_ports_list = ReadPort()
-        if not sql_ports_list:
-            time.sleep(30)
-            # logger.log('INFOR', f'无可用端口')
-        else:
-            wait_for = [pool.submit(action, sql_port) for sql_port in sql_ports_list]
-            for f in futures.as_completed(wait_for):
-                f.result()
+    logger.log('INFOR', f'可用URL探测进程启动:')
+    sql_ports_list = ReadPort()
+    if not sql_ports_list:
+        logger.log('INFOR', f'无可用端口')
+    else:
+        for sql_port in sql_ports_list:
+            action(sql_port)
 
 
 def sub_path_main(url):
-    sub_pool = futures.ThreadPoolExecutor(max_workers=UrlScan.subdirectory_threads)
-    wait_for = [sub_pool.submit(sub_chek, url + '/' + path) for path in UrlScan.subdirectory_path]
     sucess = []
-    for result in futures.as_completed(wait_for):
-        response = result.result()
+    for path in UrlScan.subdirectory_path:
+        response = sub_chek(url + '/' + path)
         if response:
             if response.status_code in UrlScan.success_status_code:
                 sucess.append(response)
-    sub_pool.shutdown()
     return sucess
 
 
