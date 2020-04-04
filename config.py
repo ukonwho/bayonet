@@ -32,7 +32,7 @@ class BayonetConfig(object):
             'schedule': 30.0
         }
     }
-    # CELERY_INCLUDE = []
+    CELERY_INCLUDE = ['tools.urlscan.Run']
 
 
 class PortScan:
