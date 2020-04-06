@@ -11,7 +11,7 @@ threads = 1
 daemon = False
 
 # debug = True
-loglevel = 'debug'
+loglevel = 'error'
 access_log_format = '%(t)s %(p)s %(h)s "%(r)s" %(s)s %(L)s %(b)s %(f)s" "%(a)s"'
 accesslog = "logs/web_access.log"
 errorlog = "logs/web_err.log"
