@@ -17,11 +17,13 @@ from tools.oneforall.dbexport import SelectIP, WriteDb
 
 crawlergo_path = str(pathlib.Path(__file__).parent.joinpath('crawlergo').resolve())
 
+
 def ReadUrl():
     """读取url任务, 一次读取一条记录"""
     sql_url = SrcUrls.query.filter(SrcUrls.flag == True).first()
     DB.session.commit()
     return sql_url
+
 
 def WriteUrl(sql_url):
     """修改爬虫任务状态"""
@@ -33,10 +35,12 @@ def WriteUrl(sql_url):
         DB.session.rollback()
         logger.log('ALERT', '修改URL任务状态SQL错误:%s' % e)
 
+
 def action(target):
     """子程序执行"""
-    cmd = [crawlergo_path, "-c", crawlergo.chromium_path, "-o", "json", '-t', crawlergo.max_tab_count, '-f', crawlergo.filter_mode,
-          '-m', crawlergo.max_crawled_count, target]
+    cmd = [crawlergo_path, "-c", crawlergo.chromium_path, "-o", "json", '-t', crawlergo.max_tab_count, '-f',
+           crawlergo.filter_mode,
+           '-m', crawlergo.max_crawled_count, target]
     rsp = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     output, error = rsp.communicate()
     try:
@@ -49,6 +53,7 @@ def action(target):
     else:
         return req_list, req_subdomain
 
+
 def WriteSubdomain(req_subdomain):
     """子域名入库"""
     for subdomain in req_subdomain:
@@ -60,6 +65,7 @@ def WriteSubdomain(req_subdomain):
         domain = FindDomain(subdomain)
         WriteDb(subdomain, domain, ip, city, cdn)
 
+
 def FindDomain(subdomain):
     """提取主域名"""
     try:
@@ -69,14 +75,16 @@ def FindDomain(subdomain):
     else:
         return result.domain + '.' + result.suffix
 
+
 def domain_ip(subdomain):
     """域名转IP"""
     try:
-        ip =socket.gethostbyname(subdomain)
+        ip = socket.gethostbyname(subdomain)
     except:
         return None
     else:
         return ip
+
 
 def write_request(dict1):
     """保存爬虫结果"""
@@ -93,6 +101,7 @@ def write_request(dict1):
     with open(sub_file, 'w', encoding='utf-8') as file:
         file.write(resule)
     logger.log('INFOR', f'[{save_file}]爬虫结果保存完毕')
+
 
 def main():
     process_name = multiprocessing.current_process().name
@@ -118,6 +127,7 @@ def main():
             req_dict['url'] = url
             write_request(req_dict)
             WriteUrl(sql_url)
+
 
 if __name__ == '__main__':
     main()
