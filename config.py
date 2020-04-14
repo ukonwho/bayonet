@@ -54,8 +54,8 @@ class PortScan:
 class Oneforall:
     # 模块API配置
     # Censys可以免费注册获取API：https://censys.io/api
-    censys_api_id = ''
-    censys_api_secret = ''
+    censys_api_id = os.getenv('CENSYS_API_ID') or ''
+    censys_api_secret = os.getenv('CENSYS_API_SECRET') or ''
     # Binaryedge可以免费注册获取API：https://app.binaryedge.io/account/api
     # 免费的API有效期只有1个月，到期之后可以再次生成，每月可以查询250次。
     binaryedge_api = ''
