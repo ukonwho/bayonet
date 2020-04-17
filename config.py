@@ -60,7 +60,7 @@ class Oneforall:
     # 免费的API有效期只有1个月，到期之后可以再次生成，每月可以查询250次。
     binaryedge_api = ''
     # Chinaz可以免费注册获取API：http://api.chinaz.com/ApiDetails/Alexa
-    chinaz_api = ''
+    chinaz_api = os.getenv('CHINAZ_API') or ''
     # Bing可以免费注册获取API：https://azure.microsoft.com/zh-cn/services/
     # cognitive-services/bing-web-search-api/#web-json
     bing_api_id = ''
